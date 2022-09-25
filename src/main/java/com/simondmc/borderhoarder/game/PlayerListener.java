@@ -2,6 +2,7 @@ package com.simondmc.borderhoarder.game;
 
 import com.simondmc.borderhoarder.BorderHoarder;
 import com.simondmc.borderhoarder.inventory.InventoryBuilder;
+import com.simondmc.borderhoarder.world.BorderWorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,16 +48,25 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void pickupItem(EntityPickupItemEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
+        if (!(e.getEntity().getLocation().getWorld().getName().equals(BorderWorldCreator.worldName) ||
+                e.getEntity().getLocation().getWorld().getName().equals("world_the_nether")
+                || e.getEntity().getLocation().getWorld().getName().equals("world_the_end"))) return;
         ItemHandler.gainItem(e.getItem().getItemStack().getType());
     }
 
     @EventHandler
     public void craft(CraftItemEvent e) {
+        if (!(e.getWhoClicked().getLocation().getWorld().getName().equals(BorderWorldCreator.worldName) ||
+                e.getWhoClicked().getLocation().getWorld().getName().equals("world_the_nether")
+                || e.getWhoClicked().getLocation().getWorld().getName().equals("world_the_end"))) return;
         ItemHandler.gainItem(e.getCurrentItem().getType());
     }
 
     @EventHandler
     public void inventoryGet(InventoryClickEvent e) {
+        if (!(e.getWhoClicked().getLocation().getWorld().getName().equals(BorderWorldCreator.worldName) ||
+                e.getWhoClicked().getLocation().getWorld().getName().equals("world_nether")
+                || e.getWhoClicked().getLocation().getWorld().getName().equals("world_the_end"))) return;
         if (e.getClickedInventory() == null) return;
 
         // shift click item from somewhere else

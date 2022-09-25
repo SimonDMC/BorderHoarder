@@ -10,7 +10,7 @@ import java.util.logging.Level;
 
 public class BorderWorldCreator {
 
-    static final String worldName = "border-game";
+    public static final String worldName = "border-game";
 
     // register local plugin instance
     BorderHoarder plugin = BorderHoarder.plugin;
