@@ -5,3 +5,8 @@ api-version: 1.19
 authors: [ SimonDMC ]
 description: Collect unique items to expand the border
 website: https://simondmc.com
+
+commands:
+  startbordergame:
+  viewcollecteditems:
+  viewmissingitems:
