@@ -1,6 +1,7 @@
 package com.simondmc.borderhoarder.game;
 
 import com.simondmc.borderhoarder.BorderHoarder;
+import com.simondmc.borderhoarder.inventory.InventoryBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,14 +15,44 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class PlayerListener implements Listener {
 
     @EventHandler
+    public void cancelViewClick(InventoryClickEvent e) {
+        if (e.getView().getTitle().contains("Collected Items§a")) {
+            e.setCancelled(true);
+            if (e.getCurrentItem() == null) return;
+            if (!e.getCurrentItem().hasItemMeta()) return;
+            if (!e.getCurrentItem().getItemMeta().hasDisplayName()) return;
+            // current page
+            int page = Integer.parseInt(e.getView().getTitle().split("/")[0].split("-")[1].substring(6));
+            if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§aNext Page")) {
+                e.getWhoClicked().openInventory(InventoryBuilder.buildCompletedInventory(page + 1));
+            } else if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§aPrevious Page")) {
+                e.getWhoClicked().openInventory(InventoryBuilder.buildCompletedInventory(page - 1));
+            }
+        }
+        if (e.getView().getTitle().contains("Missing Items§a")) {
+            e.setCancelled(true);
+            if (e.getCurrentItem() == null) return;
+            if (!e.getCurrentItem().hasItemMeta()) return;
+            if (!e.getCurrentItem().getItemMeta().hasDisplayName()) return;
+            // current page
+            int page = Integer.parseInt(e.getView().getTitle().split("/")[0].split("-")[1].substring(6));
+            if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§aNext Page")) {
+                e.getWhoClicked().openInventory(InventoryBuilder.buildMissingInventory(page + 1));
+            } else if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§aPrevious Page")) {
+                e.getWhoClicked().openInventory(InventoryBuilder.buildMissingInventory(page - 1));
+            }
+        }
+    }
+
+    @EventHandler
     public void pickupItem(EntityPickupItemEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
-        GainItem.gainItem(e.getItem().getItemStack().getType());
+        ItemHandler.gainItem(e.getItem().getItemStack().getType());
     }
 
     @EventHandler
     public void craft(CraftItemEvent e) {
-        GainItem.gainItem(e.getCurrentItem().getType());
+        ItemHandler.gainItem(e.getCurrentItem().getType());
     }
 
     @EventHandler
@@ -33,7 +64,7 @@ public class PlayerListener implements Listener {
                 (e.getClick().equals(ClickType.SHIFT_LEFT) ||
                         e.getClick().equals(ClickType.SHIFT_RIGHT) ||
                         e.getClick().equals(ClickType.SWAP_OFFHAND))) {
-            GainItem.gainItem(e.getCurrentItem().getType());
+            ItemHandler.gainItem(e.getCurrentItem().getType());
             return;
         }
 
@@ -43,7 +74,7 @@ public class PlayerListener implements Listener {
             public void run() {
                 // drag over to inventory
                 if (e.getClickedInventory().getType().equals(InventoryType.PLAYER) && e.getCurrentItem() != null) {
-                    GainItem.gainItem(e.getCurrentItem().getType());
+                    ItemHandler.gainItem(e.getCurrentItem().getType());
                 }
             }
         }.runTaskLater(BorderHoarder.plugin, 1);
