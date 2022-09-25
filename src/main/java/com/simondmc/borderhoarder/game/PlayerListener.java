@@ -16,12 +16,12 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void pickupItem(EntityPickupItemEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
-        new GainItem(e.getItem().getItemStack().getType());
+        GainItem.gainItem(e.getItem().getItemStack().getType());
     }
 
     @EventHandler
     public void craft(CraftItemEvent e) {
-        new GainItem(e.getCurrentItem().getType());
+        GainItem.gainItem(e.getCurrentItem().getType());
     }
 
     @EventHandler
@@ -33,7 +33,7 @@ public class PlayerListener implements Listener {
                 (e.getClick().equals(ClickType.SHIFT_LEFT) ||
                         e.getClick().equals(ClickType.SHIFT_RIGHT) ||
                         e.getClick().equals(ClickType.SWAP_OFFHAND))) {
-            new GainItem(e.getCurrentItem().getType());
+            GainItem.gainItem(e.getCurrentItem().getType());
             return;
         }
 
@@ -43,7 +43,7 @@ public class PlayerListener implements Listener {
             public void run() {
                 // drag over to inventory
                 if (e.getClickedInventory().getType().equals(InventoryType.PLAYER) && e.getCurrentItem() != null) {
-                    new GainItem(e.getCurrentItem().getType());
+                    GainItem.gainItem(e.getCurrentItem().getType());
                 }
             }
         }.runTaskLater(BorderHoarder.plugin, 1);
