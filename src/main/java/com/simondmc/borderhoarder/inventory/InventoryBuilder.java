@@ -5,9 +5,11 @@ import com.simondmc.borderhoarder.game.ItemHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,11 +49,15 @@ public class InventoryBuilder {
         int start = (page - 1) * 45;
         int end = Math.min(start + 45, ItemHandler.getCollectedItems().size());
         // reverse list
-        List<Material> collectedItems = ItemHandler.getCollectedItems().stream().collect(Collectors.toList());
+        List<Material> collectedItems = new ArrayList<>(ItemHandler.getCollectedItems().keySet());
         Collections.reverse(collectedItems);
         for (int j = start; j < end; j++) {
             Material itemType = collectedItems.get(j);
             i = new ItemStack(itemType);
+            m = i.getItemMeta();
+            m.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            m.setLore(Collections.singletonList("§eCollected by " + ItemHandler.getCollectedItems().get(itemType).getName()));
+            i.setItemMeta(m);
             inv.addItem(i);
         }
 
@@ -60,10 +66,8 @@ public class InventoryBuilder {
 
     public static Inventory buildMissingInventory(int page) {
         final List<Material> missingItems = ItemDictionary.getDict().keySet().stream()
-                .filter(item -> !ItemHandler.getCollectedItems().contains(item))
-                .collect(Collectors.toList());
+                .filter(item -> !ItemHandler.getCollectedItems().containsKey(item)).sorted().collect(Collectors.toList());
         // sort list
-        Collections.sort(missingItems);
         final int pages = (int) Math.ceil(missingItems.size() / 45d);
 
         Inventory inv = Bukkit.createInventory(null, 54, "Missing Items§a §r- Page " + page + "/" + pages);
@@ -98,6 +102,9 @@ public class InventoryBuilder {
         for (int j = start; j < end; j++) {
             Material itemType = missingItems.get(j);
             i = new ItemStack(itemType);
+            m = i.getItemMeta();
+            m.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            i.setItemMeta(m);
             inv.addItem(i);
         }
 

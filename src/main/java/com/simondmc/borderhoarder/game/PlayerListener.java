@@ -52,7 +52,7 @@ public class PlayerListener implements Listener {
         if (!(e.getEntity().getLocation().getWorld().getName().equals(BorderWorldCreator.worldName) ||
                 e.getEntity().getLocation().getWorld().getName().equals("world_the_nether")
                 || e.getEntity().getLocation().getWorld().getName().equals("world_the_end"))) return;
-        ItemHandler.gainItem(e.getItem().getItemStack().getType());
+        ItemHandler.gainItem(e.getItem().getItemStack().getType(), (Player) e.getEntity());
     }
 
     @EventHandler
@@ -60,7 +60,7 @@ public class PlayerListener implements Listener {
         if (!(e.getWhoClicked().getLocation().getWorld().getName().equals(BorderWorldCreator.worldName) ||
                 e.getWhoClicked().getLocation().getWorld().getName().equals("world_the_nether")
                 || e.getWhoClicked().getLocation().getWorld().getName().equals("world_the_end"))) return;
-        ItemHandler.gainItem(e.getCurrentItem().getType());
+        ItemHandler.gainItem(e.getCurrentItem().getType(), (Player) e.getWhoClicked());
     }
 
     @EventHandler
@@ -75,7 +75,7 @@ public class PlayerListener implements Listener {
                 (e.getClick().equals(ClickType.SHIFT_LEFT) ||
                         e.getClick().equals(ClickType.SHIFT_RIGHT) ||
                         e.getClick().equals(ClickType.SWAP_OFFHAND))) {
-            ItemHandler.gainItem(e.getCurrentItem().getType());
+            ItemHandler.gainItem(e.getCurrentItem().getType(), (Player) e.getWhoClicked());
             return;
         }
 
@@ -85,7 +85,7 @@ public class PlayerListener implements Listener {
             public void run() {
                 // drag over to inventory
                 if (e.getClickedInventory().getType().equals(InventoryType.PLAYER) && e.getCurrentItem() != null) {
-                    ItemHandler.gainItem(e.getCurrentItem().getType());
+                    ItemHandler.gainItem(e.getCurrentItem().getType(), (Player) e.getWhoClicked());
                 }
             }
         }.runTaskLater(BorderHoarder.plugin, 1);

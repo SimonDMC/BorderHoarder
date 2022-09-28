@@ -15,18 +15,28 @@ public class DataHandler {
     public static void saveData() {
         // convert material list to string list
         List<String> items = new ArrayList<>();
-        for (Material item : ItemHandler.getCollectedItems()) {
+        List<String> players = new ArrayList<>();
+        for (Material item : ItemHandler.getCollectedItems().keySet()) {
             items.add(item.toString());
+            players.add(ItemHandler.getCollectedItems().get(item).getUniqueId().toString());
         }
         // save data
         plugin.getConfig().set("collected-items", items);
+        for (int i = 0; i < items.size(); i++) {
+            plugin.getConfig().set("collected-items." + items.get(i), players.get(i));
+        }
         plugin.saveConfig();
     }
 
     public static void loadData() {
         // load data from file
         if (plugin.getConfig().contains("collected-items")) {
-            ItemHandler.setCollectedItems(plugin.getConfig().getStringList("collected-items"));
+            List<String> items = plugin.getConfig().getConfigurationSection("collected-items").getValues(false).keySet().stream().toList();
+            List<String> players = new ArrayList<>();
+            for (String item : items) {
+                players.add(plugin.getConfig().getString("collected-items." + item));
+            }
+            ItemHandler.setCollectedItems(items, players);
         }
     }
 }
