@@ -46,8 +46,11 @@ public class InventoryBuilder {
         // fill contents
         int start = (page - 1) * 45;
         int end = Math.min(start + 45, ItemHandler.getCollectedItems().size());
+        // reverse list
+        List<Material> collectedItems = ItemHandler.getCollectedItems().stream().collect(Collectors.toList());
+        Collections.reverse(collectedItems);
         for (int j = start; j < end; j++) {
-            Material itemType = ItemHandler.getCollectedItems().get(j);
+            Material itemType = collectedItems.get(j);
             i = new ItemStack(itemType);
             inv.addItem(i);
         }
