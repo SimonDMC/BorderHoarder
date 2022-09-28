@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerListener implements Listener {
@@ -88,5 +89,13 @@ public class PlayerListener implements Listener {
                 }
             }
         }.runTaskLater(BorderHoarder.plugin, 1);
+    }
+
+    // clear title if kicked during generation
+    @EventHandler
+    public void joinBorderWorld (PlayerJoinEvent e) {
+        if (e.getPlayer().getWorld().getName().equals(BorderWorldCreator.worldName)) {
+            e.getPlayer().resetTitle();
+        }
     }
 }

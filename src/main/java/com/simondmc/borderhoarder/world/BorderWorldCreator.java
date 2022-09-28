@@ -18,6 +18,11 @@ public class BorderWorldCreator {
     public BorderWorldCreator(long seed) {
         plugin.getLogger().log(Level.INFO, "Attempting world creation with seed " + seed);
 
+        // display generating to players
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendTitle("§aGenerating world", "§7Please wait...", 10, 10000, 10);
+        }
+
         // delete old world if it exists
         String spigotFolder = plugin.getDataFolder().getAbsoluteFile().getParentFile().getParent();
         File oldWorld = new File(spigotFolder + File.separator + worldName);
@@ -69,6 +74,8 @@ public class BorderWorldCreator {
             p.setAllowFlight(false);
             p.setFlying(false);
             p.setBedSpawnLocation(center, true);
+            // clear title
+            p.resetTitle();
         }
 
         // world settings
