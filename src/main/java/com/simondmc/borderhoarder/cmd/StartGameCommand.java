@@ -1,5 +1,6 @@
 package com.simondmc.borderhoarder.cmd;
 
+import com.simondmc.borderhoarder.game.ItemHandler;
 import com.simondmc.borderhoarder.world.BorderWorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,6 +26,9 @@ public class StartGameCommand implements CommandExecutor {
             } else {
                 seed = new Random().nextLong();
             }
+
+            // reset data
+            ItemHandler.resetCollectedItems();
 
             new BorderWorldCreator(seed);
             return true;

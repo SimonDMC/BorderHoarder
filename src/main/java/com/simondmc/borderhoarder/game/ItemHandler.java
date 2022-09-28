@@ -42,4 +42,9 @@ public class ItemHandler {
             collectedItems.add(Material.valueOf(item));
         }
     }
+
+    public static void resetCollectedItems() {
+        collectedItems.clear();
+        DataHandler.saveData();
+    }
 }
