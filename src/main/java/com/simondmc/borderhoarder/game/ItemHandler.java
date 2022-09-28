@@ -1,6 +1,7 @@
 package com.simondmc.borderhoarder.game;
 
 import com.simondmc.borderhoarder.BorderHoarder;
+import com.simondmc.borderhoarder.data.DataHandler;
 import com.simondmc.borderhoarder.world.BorderExpander;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -26,10 +27,19 @@ public class ItemHandler {
             }
             // expand border
             BorderExpander.expandBorder();
+            // save data
+            DataHandler.saveData();
         }
     }
 
     public static List<Material> getCollectedItems() {
         return collectedItems;
+    }
+
+    public static void setCollectedItems(List<String> items) {
+        collectedItems.clear();
+        for (String item : items) {
+            collectedItems.add(Material.valueOf(item));
+        }
     }
 }
