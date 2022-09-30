@@ -31,6 +31,11 @@ public class DataHandler {
     public static void loadData() {
         // load data from file
         if (plugin.getConfig().contains("collected-items")) {
+            if (plugin.getConfig().getConfigurationSection("collected-items") == null) {
+                // pass empty list
+                ItemHandler.setCollectedItems(new ArrayList<>(), new ArrayList<>());
+                return;
+            }
             List<String> items = plugin.getConfig().getConfigurationSection("collected-items").getValues(false).keySet().stream().toList();
             List<String> players = new ArrayList<>();
             for (String item : items) {
