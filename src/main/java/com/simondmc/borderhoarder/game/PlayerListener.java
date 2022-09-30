@@ -3,6 +3,7 @@ package com.simondmc.borderhoarder.game;
 import com.simondmc.borderhoarder.BorderHoarder;
 import com.simondmc.borderhoarder.inventory.InventoryBuilder;
 import com.simondmc.borderhoarder.world.BorderWorldCreator;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,6 +13,7 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerListener implements Listener {
@@ -71,11 +73,25 @@ public class PlayerListener implements Listener {
         if (e.getClickedInventory() == null) return;
 
         // shift click item from somewhere else
-        if (!e.isCancelled() &&
-                (e.getClick().equals(ClickType.SHIFT_LEFT) ||
-                        e.getClick().equals(ClickType.SHIFT_RIGHT) ||
-                        e.getClick().equals(ClickType.SWAP_OFFHAND))) {
-            ItemHandler.gainItem(e.getCurrentItem().getType(), (Player) e.getWhoClicked());
+        if (e.getClick().equals(ClickType.SHIFT_LEFT) ||
+                e.getClick().equals(ClickType.SHIFT_RIGHT)) {
+            if (e.getCurrentItem() == null) return;
+            Material clickedItem = e.getCurrentItem().getType();
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    // wait a tick to see if the player still has the item
+                    for (ItemStack item : e.getWhoClicked().getInventory().getContents()) {
+                        if (item == null) continue;
+                        if (item.getType() == clickedItem) {
+                            // player still has the item
+                            ItemHandler.gainItem(item.getType(), (Player) e.getWhoClicked());
+                            return;
+                        }
+                    }
+                }
+            }.runTaskLater(BorderHoarder.plugin, 1);
             return;
         }
 
@@ -93,7 +109,7 @@ public class PlayerListener implements Listener {
 
     // clear title if kicked during generation
     @EventHandler
-    public void joinBorderWorld (PlayerJoinEvent e) {
+    public void joinBorderWorld(PlayerJoinEvent e) {
         if (e.getPlayer().getWorld().getName().equals(BorderWorldCreator.worldName)) {
             e.getPlayer().resetTitle();
         }
