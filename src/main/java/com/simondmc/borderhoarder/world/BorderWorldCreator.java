@@ -1,6 +1,7 @@
 package com.simondmc.borderhoarder.world;
 
 import com.simondmc.borderhoarder.BorderHoarder;
+import com.simondmc.borderhoarder.util.PlayerUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -61,20 +62,8 @@ public class BorderWorldCreator {
         // tp everyone in and reset them
         for (Player p : plugin.getServer().getOnlinePlayers()) {
             p.teleport(center);
-            p.getInventory().clear();
-            p.getInventory().setArmorContents(null);
-            p.getInventory().setItemInOffHand(null);
-            p.setGameMode(GameMode.SURVIVAL);
-            p.setHealth(p.getMaxHealth());
-            p.setFoodLevel(20);
-            p.setSaturation(20);
-            p.setExp(0);
-            p.setLevel(0);
-            p.setFireTicks(0);
-            p.setFallDistance(0);
-            p.setAllowFlight(false);
-            p.setFlying(false);
             p.setBedSpawnLocation(center, true);
+            PlayerUtil.preparePlayer(p);
             // clear title
             p.resetTitle();
         }

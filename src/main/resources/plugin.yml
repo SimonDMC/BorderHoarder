@@ -10,3 +10,4 @@ commands:
   startbordergame:
   viewcollecteditems:
   viewmissingitems:
+  joinbordergame:

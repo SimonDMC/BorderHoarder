@@ -1,5 +1,6 @@
 package com.simondmc.borderhoarder;
 
+import com.simondmc.borderhoarder.cmd.JoinGameCommand;
 import com.simondmc.borderhoarder.cmd.StartGameCommand;
 import com.simondmc.borderhoarder.cmd.ViewCollectedItemsCommand;
 import com.simondmc.borderhoarder.cmd.ViewMissingItemsCommand;
@@ -21,6 +22,7 @@ public final class BorderHoarder extends JavaPlugin {
         plugin.getCommand("startbordergame").setExecutor(new StartGameCommand());
         plugin.getCommand("viewcollecteditems").setExecutor(new ViewCollectedItemsCommand());
         plugin.getCommand("viewmissingitems").setExecutor(new ViewMissingItemsCommand());
+        plugin.getCommand("joinbordergame").setExecutor(new JoinGameCommand());
         // populate item dictionary
         ItemDictionary.populateDict();
         // register listener
