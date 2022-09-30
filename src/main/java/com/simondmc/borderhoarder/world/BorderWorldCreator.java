@@ -13,7 +13,10 @@ public class BorderWorldCreator {
     public static final String worldName = "border-game";
 
     // register local plugin instance
-    BorderHoarder plugin = BorderHoarder.plugin;
+    private static final BorderHoarder plugin = BorderHoarder.plugin;
+
+    private static final String spigotFolder = plugin.getDataFolder().getAbsoluteFile().getParentFile().getParent();
+    private static final File worldFile = new File(spigotFolder + File.separator + worldName);
 
     public BorderWorldCreator(long seed) {
         plugin.getLogger().log(Level.INFO, "Attempting world creation with seed " + seed);
@@ -24,9 +27,7 @@ public class BorderWorldCreator {
         }
 
         // delete old world if it exists
-        String spigotFolder = plugin.getDataFolder().getAbsoluteFile().getParentFile().getParent();
-        File oldWorld = new File(spigotFolder + File.separator + worldName);
-        if (oldWorld.exists()) {
+        if (worldFile.exists()) {
             plugin.getLogger().log(Level.INFO, "Found old world, attempting to teleport everyone out");
             // tp everyone out so server can unload world
             for (Player p : plugin.getServer().getOnlinePlayers()) {
@@ -40,7 +41,7 @@ public class BorderWorldCreator {
             plugin.getLogger().log(Level.INFO, "All players have been teleported out, unloading");
             plugin.getServer().unloadWorld(worldName, false);
             plugin.getLogger().log(Level.INFO, "World unloaded, removing folder");
-            deleteDir(oldWorld);
+            deleteDir(worldFile);
             plugin.getLogger().log(Level.INFO, "Old world successfully removed");
         }
 
@@ -98,5 +99,12 @@ public class BorderWorldCreator {
             }
         }
         file.delete();
+    }
+
+    public static void registerWorld() {
+        if (worldFile.exists()) {
+            plugin.getServer().createWorld(new WorldCreator(worldName));
+            plugin.getLogger().log(Level.INFO, "World " + worldName + " registered");
+        }
     }
 }

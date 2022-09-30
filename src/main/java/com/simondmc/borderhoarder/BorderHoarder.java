@@ -6,6 +6,7 @@ import com.simondmc.borderhoarder.cmd.ViewMissingItemsCommand;
 import com.simondmc.borderhoarder.data.DataHandler;
 import com.simondmc.borderhoarder.game.ItemDictionary;
 import com.simondmc.borderhoarder.game.PlayerListener;
+import com.simondmc.borderhoarder.world.BorderWorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BorderHoarder extends JavaPlugin {
@@ -26,6 +27,8 @@ public final class BorderHoarder extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(), plugin);
         // load data
         DataHandler.loadData();
+        // register world if it exists
+        BorderWorldCreator.registerWorld();
     }
 
     @Override
