@@ -56,7 +56,8 @@ public class InventoryBuilder {
             i = new ItemStack(itemType);
             m = i.getItemMeta();
             m.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-            m.setLore(Collections.singletonList("§eCollected by " + ItemHandler.getCollectedItems().get(itemType).getName()));
+            String playerName = ItemHandler.getCollectedItems().get(itemType) != null ? ItemHandler.getCollectedItems().get(itemType).getName() : "who knows!";
+            m.setLore(Collections.singletonList("§eCollected by " + playerName));
             i.setItemMeta(m);
             inv.addItem(i);
         }
