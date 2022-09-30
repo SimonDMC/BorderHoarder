@@ -19,9 +19,20 @@ public class ItemHandler {
         if (!collectedItems.containsKey(itemType)) {
             // add to list of collected items
             collectedItems.put(itemType, p);
+            // get a/an/blank
+            String itemName = ItemDictionary.getDict().get(itemType);
+            List<Character> vowels = new ArrayList<>(Arrays.asList('a', 'e', 'i', 'o', 'u'));
+            String conjuction;
+            if (itemName.charAt(itemName.length() - 1) == 's') {
+                conjuction = "";
+            } else if (vowels.contains(itemName.toLowerCase().charAt(0))) {
+                conjuction = "an ";
+            } else {
+                conjuction = "a ";
+            }
             // announce to players
             for (Player recipient : BorderHoarder.plugin.getServer().getOnlinePlayers()) {
-                recipient.sendMessage("§aYou collected a " + ItemDictionary.getDict().get(itemType) + "!");
+                recipient.sendMessage("§aYou collected " + conjuction + itemName + "!");
                 recipient.playSound(recipient.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
             }
             // expand border
