@@ -1,10 +1,13 @@
 package com.simondmc.borderhoarder.cmd;
 
+import com.simondmc.borderhoarder.BorderHoarder;
 import com.simondmc.borderhoarder.game.ItemHandler;
 import com.simondmc.borderhoarder.world.BorderWorldCreator;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.Random;
 
@@ -29,6 +32,10 @@ public class StartGameCommand implements CommandExecutor {
 
             // reset data
             ItemHandler.resetCollectedItems();
+            // set main scoreboard
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+            }
 
             new BorderWorldCreator(seed);
             return true;
