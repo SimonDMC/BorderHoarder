@@ -3,6 +3,7 @@ package com.simondmc.borderhoarder.game;
 import com.simondmc.borderhoarder.BorderHoarder;
 import com.simondmc.borderhoarder.inventory.InventoryBuilder;
 import com.simondmc.borderhoarder.world.BorderWorldCreator;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,7 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -112,6 +114,14 @@ public class PlayerListener implements Listener {
     public void joinBorderWorld(PlayerJoinEvent e) {
         if (e.getPlayer().getWorld().getName().equals(BorderWorldCreator.worldName)) {
             e.getPlayer().resetTitle();
+        }
+    }
+
+    // force respawn position if bed is destroyed
+    @EventHandler
+    public void respawn(PlayerRespawnEvent e) {
+        if (e.getPlayer().getWorld().getName().equals(BorderWorldCreator.worldName) && e.getPlayer().getBedSpawnLocation() == null) {
+            e.setRespawnLocation(Bukkit.getWorld(BorderWorldCreator.worldName).getSpawnLocation());
         }
     }
 }
