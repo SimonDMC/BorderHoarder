@@ -18,7 +18,11 @@ public class DataHandler {
         List<String> players = new ArrayList<>();
         for (Material item : ItemHandler.getCollectedItems().keySet()) {
             items.add(item.toString());
-            players.add(ItemHandler.getCollectedItems().get(item).getUniqueId().toString());
+            if (ItemHandler.getCollectedItems().get(item) != null) {
+                players.add(ItemHandler.getCollectedItems().get(item).getUniqueId().toString());
+            } else {
+                players.add("null");
+            }
         }
         // save data
         plugin.getConfig().set("collected-items", items);
