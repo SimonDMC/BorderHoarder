@@ -15,7 +15,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerListener implements Listener {
@@ -64,7 +63,17 @@ public class PlayerListener implements Listener {
         if (!(e.getWhoClicked().getLocation().getWorld().getName().equals(BorderWorldCreator.worldName) ||
                 e.getWhoClicked().getLocation().getWorld().getName().equals("world_the_nether")
                 || e.getWhoClicked().getLocation().getWorld().getName().equals("world_the_end"))) return;
-        ItemHandler.gainItem(e.getCurrentItem().getType(), (Player) e.getWhoClicked());
+        Material craftedItem = e.getCurrentItem().getType();
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                // wait a tick to see if the player actually has the item
+                if (e.getWhoClicked().getInventory().contains(craftedItem) || e.getWhoClicked().getItemOnCursor().getType() == craftedItem) {
+                    ItemHandler.gainItem(craftedItem, (Player) e.getWhoClicked());
+                }
+            }
+        }.runTaskLater(BorderHoarder.plugin, 1);
     }
 
     @EventHandler
@@ -84,13 +93,8 @@ public class PlayerListener implements Listener {
                 @Override
                 public void run() {
                     // wait a tick to see if the player still has the item
-                    for (ItemStack item : e.getWhoClicked().getInventory().getContents()) {
-                        if (item == null) continue;
-                        if (item.getType() == clickedItem) {
-                            // player still has the item
-                            ItemHandler.gainItem(item.getType(), (Player) e.getWhoClicked());
-                            return;
-                        }
+                    if (e.getWhoClicked().getInventory().contains(clickedItem)) {
+                        ItemHandler.gainItem(clickedItem, (Player) e.getWhoClicked());
                     }
                 }
             }.runTaskLater(BorderHoarder.plugin, 1);
