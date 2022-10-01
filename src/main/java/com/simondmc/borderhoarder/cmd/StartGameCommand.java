@@ -1,7 +1,7 @@
 package com.simondmc.borderhoarder.cmd;
 
-import com.simondmc.borderhoarder.BorderHoarder;
 import com.simondmc.borderhoarder.game.ItemHandler;
+import com.simondmc.borderhoarder.game.TabHandler;
 import com.simondmc.borderhoarder.world.BorderWorldCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -36,6 +36,8 @@ public class StartGameCommand implements CommandExecutor {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
             }
+            // init tab
+            TabHandler.updateTab();
 
             new BorderWorldCreator(seed);
             return true;
