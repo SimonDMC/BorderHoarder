@@ -17,6 +17,11 @@ public class StartGameCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (label.equalsIgnoreCase("startbordergame")) {
 
+            if (!sender.isOp()) {
+                sender.sendMessage("§cYou don't have permission to start a game!");
+                return true;
+            }
+
             // create world with seed
             long seed;
             if (args.length >= 1) {
