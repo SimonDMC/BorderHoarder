@@ -41,7 +41,7 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <outputFile>C:\Users\SimonDMCPlayer\Desktop\spigot\plugins\BorderHoarder.jar</outputFile>
+                            <outputFile>C:\Users\SimonDMC\Desktop\Spigot\plugins\BorderHoarder.jar</outputFile>
                         </configuration>
                     </execution>
                 </executions>

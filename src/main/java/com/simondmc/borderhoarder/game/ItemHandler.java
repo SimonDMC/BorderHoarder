@@ -32,7 +32,7 @@ public class ItemHandler {
             }
             // announce to players
             for (Player recipient : BorderHoarder.plugin.getServer().getOnlinePlayers()) {
-                recipient.sendMessage("§aYou collected " + conjuction + itemName + "!");
+                recipient.sendMessage("§a" + (recipient == p ? "You" : p.getName()) + " collected " + conjuction + itemName + "!");
                 recipient.playSound(recipient.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
             }
             // expand border
