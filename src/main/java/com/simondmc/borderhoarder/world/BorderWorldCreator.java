@@ -12,19 +12,23 @@ import java.util.logging.Level;
 public class BorderWorldCreator {
 
     public static final String worldName = "border-game";
+    public static final String netherWorldName = "border-game-nether";
+    public static final String endWorldName = "border-game-end";
 
     // register local plugin instance
     private static final BorderHoarder plugin = BorderHoarder.plugin;
 
     private static final String spigotFolder = plugin.getDataFolder().getAbsoluteFile().getParentFile().getParent();
     private static final File worldFile = new File(spigotFolder + File.separator + worldName);
+    private static final File netherWorldFile = new File(spigotFolder + File.separator + netherWorldName);
+    private static final File endWorldFile = new File(spigotFolder + File.separator + endWorldName);
 
     public BorderWorldCreator(long seed) {
         plugin.getLogger().log(Level.INFO, "Attempting world creation with seed " + seed);
 
         // display generating to players
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendTitle("§aGenerating world", "§7Please wait...", 10, 10000, 10);
+            p.sendTitle("§aGenerating world (1/3)", "§7Please wait...", 10, 10000, 10);
         }
 
         // delete old world if it exists
@@ -32,30 +36,60 @@ public class BorderWorldCreator {
             plugin.getLogger().log(Level.INFO, "Found old world, attempting to teleport everyone out");
             // tp everyone out so server can unload world
             for (Player p : plugin.getServer().getOnlinePlayers()) {
-                if (p.getWorld().getName().equals(worldName)) {
+                if (p.getWorld().getName().equals(worldName) || p.getWorld().getName().equals(netherWorldName) || p.getWorld().getName().equals(endWorldName)) {
                     World w = Bukkit.getWorlds().get(0).getName().equals(worldName) ? Bukkit.getWorlds().get(1) : Bukkit.getWorlds().get(0);
                     Location l = p.getLocation();
                     l.setWorld(w);
                     p.teleport(l);
                 }
             }
-            plugin.getLogger().log(Level.INFO, "All players have been teleported out, unloading");
+            plugin.getLogger().log(Level.INFO, "All players have been teleported out, unloading worlds");
             plugin.getServer().unloadWorld(worldName, false);
-            plugin.getLogger().log(Level.INFO, "World unloaded, removing folder");
+            plugin.getServer().unloadWorld(netherWorldName, false);
+            plugin.getServer().unloadWorld(endWorldName, false);
+            plugin.getLogger().log(Level.INFO, "Worlds unloaded, removing folder");
             deleteDir(worldFile);
-            plugin.getLogger().log(Level.INFO, "Old world successfully removed");
+            deleteDir(netherWorldFile);
+            deleteDir(endWorldFile);
+            plugin.getLogger().log(Level.INFO, "Old worlds successfully removed");
         }
 
-        // world settings
+        // overworld settings
         WorldCreator wc = new WorldCreator(worldName);
         wc.seed(seed);
 
-        plugin.getLogger().log(Level.INFO, "World creation starting");
+        plugin.getLogger().log(Level.INFO, "Overworld creation starting");
 
-        // create world
+        // create overworld
         World w = plugin.getServer().createWorld(wc);
 
-        plugin.getLogger().log(Level.INFO, "World creation done, teleporting all players");
+        plugin.getLogger().log(Level.INFO, "Overworld creation done, nether creation starting");
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendTitle("§aGenerating world (2/3)", "§7Please wait...", 0, 10000, 10);
+        }
+
+        // nether settings
+        WorldCreator netherWc = new WorldCreator(netherWorldName);
+        netherWc.seed(seed);
+        netherWc.environment(World.Environment.NETHER);
+
+        // create nether
+        World netherW = plugin.getServer().createWorld(netherWc);
+
+        plugin.getLogger().log(Level.INFO, "Nether creation done, end creation starting");
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendTitle("§aGenerating world (3/3)", "§7Please wait...", 0, 10000, 10);
+        }
+
+        // end settings
+        WorldCreator endWc = new WorldCreator(endWorldName);
+        endWc.seed(seed);
+        endWc.environment(World.Environment.THE_END);
+
+        // create end
+        World endW = plugin.getServer().createWorld(endWc);
+
+        plugin.getLogger().log(Level.INFO, "End creation done, teleporting players in");
 
         final Location center = w.getSpawnLocation().clone().add(.5, 0, .5);
 
@@ -94,6 +128,22 @@ public class BorderWorldCreator {
         if (worldFile.exists()) {
             plugin.getServer().createWorld(new WorldCreator(worldName));
             plugin.getLogger().log(Level.INFO, "World " + worldName + " registered");
+        } else {
+            plugin.getLogger().log(Level.WARNING, "World " + worldName + " does not exist");
+        }
+
+        if (netherWorldFile.exists()) {
+            plugin.getServer().createWorld(new WorldCreator(netherWorldName));
+            plugin.getLogger().log(Level.INFO, "World " + netherWorldName + " registered");
+        } else {
+            plugin.getLogger().log(Level.WARNING, "World " + netherWorldName + " does not exist");
+        }
+
+        if (endWorldFile.exists()) {
+            plugin.getServer().createWorld(new WorldCreator(endWorldName));
+            plugin.getLogger().log(Level.INFO, "World " + endWorldName + " registered");
+        } else {
+            plugin.getLogger().log(Level.WARNING, "World " + endWorldName + " does not exist");
         }
     }
 }
