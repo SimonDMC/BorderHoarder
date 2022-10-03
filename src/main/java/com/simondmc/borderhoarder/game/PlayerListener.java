@@ -129,8 +129,13 @@ public class PlayerListener implements Listener {
     // force respawn position if bed is destroyed
     @EventHandler
     public void respawn(PlayerRespawnEvent e) {
+        // bed broken
         if (e.getPlayer().getWorld().getName().equals(BorderWorldCreator.worldName) && e.getPlayer().getBedSpawnLocation() == null) {
             e.setRespawnLocation(Bukkit.getWorld(BorderWorldCreator.worldName).getSpawnLocation());
+        }
+        // spawn obstructed
+        if (e.getPlayer().getWorld().getName().equals(BorderWorldCreator.worldName) && e.getPlayer().getWorld().getBlockAt(e.getPlayer().getWorld().getSpawnLocation()).getType() != Material.AIR) {
+            e.setRespawnLocation(Bukkit.getWorld(BorderWorldCreator.worldName).getHighestBlockAt(Bukkit.getWorld(BorderWorldCreator.worldName).getSpawnLocation()).getLocation().add(0.5, 1, 0.5));
         }
     }
 
