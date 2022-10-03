@@ -1,14 +1,22 @@
 package com.simondmc.borderhoarder.util;
 
+import com.simondmc.borderhoarder.BorderHoarder;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
 
 public class PlayerUtil {
+
+    private static final Map<UUID, String> usernameCache = new java.util.HashMap<>();
+
     public static void preparePlayer(Player p) {
         p.getInventory().clear();
         p.getInventory().setArmorContents(null);
@@ -30,6 +38,21 @@ public class PlayerUtil {
             for (String criteria : progress.getAwardedCriteria()) {
                 progress.revokeCriteria(criteria);
             }
+        }
+    }
+
+    public static String getNameFromUUID(UUID uuid) {
+        if (usernameCache.containsKey(uuid)) {
+            return usernameCache.get(uuid);
+        }
+        try {
+            String name = new com.google.gson.JsonParser().parse(new java.io.InputStreamReader(new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString().replace("-", "")).openStream())).getAsJsonObject().get("name").getAsString();
+            usernameCache.put(uuid, name);
+            BorderHoarder.plugin.getLogger().info("Cached username " + name + " for UUID " + uuid);
+            return name;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

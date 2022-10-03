@@ -2,6 +2,7 @@ package com.simondmc.borderhoarder.inventory;
 
 import com.simondmc.borderhoarder.game.ItemDictionary;
 import com.simondmc.borderhoarder.game.ItemHandler;
+import com.simondmc.borderhoarder.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -56,7 +57,7 @@ public class InventoryBuilder {
             i = new ItemStack(itemType);
             m = i.getItemMeta();
             m.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-            String playerName = ItemHandler.getCollectedItems().get(itemType) != null ? ItemHandler.getCollectedItems().get(itemType).getName() : "who knows!";
+            String playerName = ItemHandler.getCollectedItems().get(itemType) != null ? PlayerUtil.getNameFromUUID(ItemHandler.getCollectedItems().get(itemType)) : "who knows!";
             m.setLore(Collections.singletonList("§eCollected by " + playerName));
             i.setItemMeta(m);
             inv.addItem(i);

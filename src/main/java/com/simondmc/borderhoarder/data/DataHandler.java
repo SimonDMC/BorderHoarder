@@ -19,7 +19,7 @@ public class DataHandler {
         for (Material item : ItemHandler.getCollectedItems().keySet()) {
             items.add(item.toString());
             if (ItemHandler.getCollectedItems().get(item) != null) {
-                players.add(ItemHandler.getCollectedItems().get(item).getUniqueId().toString());
+                players.add(ItemHandler.getCollectedItems().get(item).toString());
             } else {
                 players.add("null");
             }

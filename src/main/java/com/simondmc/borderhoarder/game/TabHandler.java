@@ -20,9 +20,7 @@ public class TabHandler {
         // set player scores
         for (Player p : Bukkit.getOnlinePlayers()) {
             // get amount of items collected by UUID
-            o.getScore(p).setScore(Collections.frequency(ItemHandler.getCollectedItems().values().stream().map(
-                    Entity::getUniqueId
-            ).collect(Collectors.toList()), p.getUniqueId()));
+            o.getScore(p).setScore(Collections.frequency(ItemHandler.getCollectedItems().values(), p.getUniqueId()));
         }
     }
 }
