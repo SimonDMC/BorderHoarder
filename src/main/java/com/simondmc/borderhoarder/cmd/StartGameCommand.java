@@ -1,5 +1,6 @@
 package com.simondmc.borderhoarder.cmd;
 
+import com.simondmc.borderhoarder.game.GameData;
 import com.simondmc.borderhoarder.game.ItemHandler;
 import com.simondmc.borderhoarder.game.TabHandler;
 import com.simondmc.borderhoarder.world.BorderWorldCreator;
@@ -37,6 +38,7 @@ public class StartGameCommand implements CommandExecutor {
 
             // reset data
             ItemHandler.resetCollectedItems();
+            GameData.clear();
             // set main scoreboard
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());

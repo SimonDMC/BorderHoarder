@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -15,7 +16,11 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerListener implements Listener {
 
@@ -126,6 +131,34 @@ public class PlayerListener implements Listener {
     public void respawn(PlayerRespawnEvent e) {
         if (e.getPlayer().getWorld().getName().equals(BorderWorldCreator.worldName) && e.getPlayer().getBedSpawnLocation() == null) {
             e.setRespawnLocation(Bukkit.getWorld(BorderWorldCreator.worldName).getSpawnLocation());
+        }
+    }
+
+    Map<Material, Material> saplings = new HashMap<>() {{
+        put(Material.OAK_LEAVES, Material.OAK_SAPLING);
+        put(Material.SPRUCE_LEAVES, Material.SPRUCE_SAPLING);
+        put(Material.BIRCH_LEAVES, Material.BIRCH_SAPLING);
+        put(Material.JUNGLE_LEAVES, Material.JUNGLE_SAPLING);
+        put(Material.ACACIA_LEAVES, Material.ACACIA_SAPLING);
+        put(Material.DARK_OAK_LEAVES, Material.DARK_OAK_SAPLING);
+    }};
+
+    // guarantee sapling and seed on first break
+    @EventHandler
+    public void breakBlock(BlockBreakEvent e) {
+        if (!GameData.getBoolean("dropped-first-seed") &&
+                e.getBlock().getWorld().getName().equals(BorderWorldCreator.worldName) &&
+                e.getBlock().getType().equals(Material.GRASS)) {
+            e.setDropItems(false);
+            e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), new ItemStack(Material.WHEAT_SEEDS));
+            GameData.set("dropped-first-seed", true);
+        }
+        if (!GameData.getBoolean("dropped-first-sapling") &&
+                e.getBlock().getWorld().getName().equals(BorderWorldCreator.worldName) &&
+                saplings.containsKey(e.getBlock().getType())) {
+            e.setDropItems(false);
+            e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), new ItemStack(saplings.get(e.getBlock().getType())));
+            GameData.set("dropped-first-sapling", true);
         }
     }
 }
