@@ -11,3 +11,4 @@ commands:
   viewcollecteditems:
   viewmissingitems:
   joinbordergame:
+  iscollected:
