@@ -3,7 +3,7 @@ package com.simondmc.borderhoarder.util;
 import java.util.Map;
 import java.util.Objects;
 
-public class StringUtil {
+public class DataTypeUtil {
 
     public static String joinStringArray(String[] array, String separator) {
         StringBuilder sb = new StringBuilder();
@@ -17,9 +17,9 @@ public class StringUtil {
     }
 
     // https://stackoverflow.com/a/2904266
-    public static <T, E> T getKeyByValue(Map<T, E> map, E value) {
-        for (Map.Entry<T, E> entry : map.entrySet()) {
-            if (Objects.equals(value, entry.getValue())) {
+    public static <T, String> T getKeyByCaseInsensitiveString(Map<T, String> map, String value) {
+        for (Map.Entry<T, String> entry : map.entrySet()) {
+            if (value.toString().equalsIgnoreCase((java.lang.String) entry.getValue())) {
                 return entry.getKey();
             }
         }
