@@ -1,26 +1,23 @@
 package com.simondmc.borderhoarder.game;
 
-import com.simondmc.borderhoarder.BorderHoarder;
 import com.simondmc.borderhoarder.inventory.InventoryBuilder;
 import com.simondmc.borderhoarder.world.BorderWorldCreator;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,70 +54,6 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void pickupItem(EntityPickupItemEvent e) {
-        if (!(e.getEntity() instanceof Player)) return;
-        if (!(e.getEntity().getLocation().getWorld().getName().equals(BorderWorldCreator.worldName) ||
-                e.getEntity().getLocation().getWorld().getName().equals(BorderWorldCreator.netherWorldName)
-                || e.getEntity().getLocation().getWorld().getName().equals(BorderWorldCreator.endWorldName))) return;
-        ItemHandler.gainItem(e.getItem().getItemStack().getType(), (Player) e.getEntity());
-    }
-
-    @EventHandler
-    public void craft(CraftItemEvent e) {
-        if (!(e.getWhoClicked().getLocation().getWorld().getName().equals(BorderWorldCreator.worldName) ||
-                e.getWhoClicked().getLocation().getWorld().getName().equals(BorderWorldCreator.netherWorldName)
-                || e.getWhoClicked().getLocation().getWorld().getName().equals(BorderWorldCreator.endWorldName))) return;
-        Material craftedItem = e.getCurrentItem().getType();
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                // wait a tick to see if the player actually has the item
-                if (e.getWhoClicked().getInventory().contains(craftedItem) || e.getWhoClicked().getItemOnCursor().getType() == craftedItem) {
-                    ItemHandler.gainItem(craftedItem, (Player) e.getWhoClicked());
-                }
-            }
-        }.runTaskLater(BorderHoarder.plugin, 1);
-    }
-
-    @EventHandler
-    public void inventoryGet(InventoryClickEvent e) {
-        if (!(e.getWhoClicked().getLocation().getWorld().getName().equals(BorderWorldCreator.worldName) ||
-                e.getWhoClicked().getLocation().getWorld().getName().equals(BorderWorldCreator.netherWorldName)
-                || e.getWhoClicked().getLocation().getWorld().getName().equals(BorderWorldCreator.endWorldName))) return;
-        if (e.getClickedInventory() == null) return;
-
-        // shift click item from somewhere else
-        if (e.getClick().equals(ClickType.SHIFT_LEFT) ||
-                e.getClick().equals(ClickType.SHIFT_RIGHT)) {
-            if (e.getCurrentItem() == null) return;
-            Material clickedItem = e.getCurrentItem().getType();
-            new BukkitRunnable() {
-
-                @Override
-                public void run() {
-                    // wait a tick to see if the player still has the item
-                    if (e.getWhoClicked().getInventory().contains(clickedItem)) {
-                        ItemHandler.gainItem(clickedItem, (Player) e.getWhoClicked());
-                    }
-                }
-            }.runTaskLater(BorderHoarder.plugin, 1);
-            return;
-        }
-
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                // drag over to inventory
-                if (e.getClickedInventory().getType().equals(InventoryType.PLAYER) && e.getCurrentItem() != null) {
-                    ItemHandler.gainItem(e.getCurrentItem().getType(), (Player) e.getWhoClicked());
-                }
-            }
-        }.runTaskLater(BorderHoarder.plugin, 1);
-    }
-
     // clear title if kicked during generation
     @EventHandler
     public void joinBorderWorld(PlayerJoinEvent e) {
@@ -134,8 +67,8 @@ public class PlayerListener implements Listener {
     public void respawn(PlayerRespawnEvent e) {
         // bed broken
         if ((e.getPlayer().getWorld().getName().equals(BorderWorldCreator.worldName)
-         || e.getPlayer().getWorld().getName().equals(BorderWorldCreator.netherWorldName)
-        || e.getPlayer().getWorld().getName().equals(BorderWorldCreator.endWorldName))
+                || e.getPlayer().getWorld().getName().equals(BorderWorldCreator.netherWorldName)
+                || e.getPlayer().getWorld().getName().equals(BorderWorldCreator.endWorldName))
                 && e.getPlayer().getBedSpawnLocation() == null) {
             e.setRespawnLocation(Bukkit.getWorld(BorderWorldCreator.worldName).getSpawnLocation());
         }

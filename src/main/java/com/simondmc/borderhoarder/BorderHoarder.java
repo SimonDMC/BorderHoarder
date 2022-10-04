@@ -3,6 +3,7 @@ package com.simondmc.borderhoarder;
 import com.simondmc.borderhoarder.cmd.*;
 import com.simondmc.borderhoarder.data.DataHandler;
 import com.simondmc.borderhoarder.game.ItemDictionary;
+import com.simondmc.borderhoarder.game.ObtainItemListener;
 import com.simondmc.borderhoarder.game.PlayerListener;
 import com.simondmc.borderhoarder.world.BorderWorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +26,7 @@ public final class BorderHoarder extends JavaPlugin {
         ItemDictionary.populateDict();
         // register listener
         getServer().getPluginManager().registerEvents(new PlayerListener(), plugin);
+        getServer().getPluginManager().registerEvents(new ObtainItemListener(), plugin);
         // load data
         DataHandler.loadData();
         // register world if it exists
