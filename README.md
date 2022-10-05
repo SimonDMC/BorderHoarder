@@ -49,6 +49,8 @@ Collect unique items to expand the border!
 
 ## Compatibility
 
+- The plugin runs on Bukkit, meaning any fork of Bukkit should
+  work, including Spigot and Paper
 - The game only works on 1.19 and above, as it uses all the new
   items added in 1.19.
 - The game can be played with any number of players, but it is
