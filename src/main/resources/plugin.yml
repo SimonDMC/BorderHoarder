@@ -3,7 +3,7 @@ version: '${project.version}'
 main: com.simondmc.borderhoarder.BorderHoarder
 api-version: 1.19
 authors: [ SimonDMC ]
-description: Collect unique items to expand the border
+description: Collect unique items to expand the border!
 website: https://simondmc.com
 
 commands:
