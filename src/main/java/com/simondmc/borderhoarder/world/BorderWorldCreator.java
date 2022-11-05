@@ -133,14 +133,18 @@ public class BorderWorldCreator {
         }
 
         if (netherWorldFile.exists()) {
-            plugin.getServer().createWorld(new WorldCreator(netherWorldName));
+            WorldCreator wc = new WorldCreator(netherWorldName);
+            wc.environment(World.Environment.NETHER);
+            plugin.getServer().createWorld(wc);
             plugin.getLogger().log(Level.INFO, "World " + netherWorldName + " registered");
         } else {
             plugin.getLogger().log(Level.WARNING, "World " + netherWorldName + " does not exist");
         }
 
         if (endWorldFile.exists()) {
-            plugin.getServer().createWorld(new WorldCreator(endWorldName));
+            WorldCreator wc = new WorldCreator(endWorldName);
+            wc.environment(World.Environment.THE_END);
+            plugin.getServer().createWorld(wc);
             plugin.getLogger().log(Level.INFO, "World " + endWorldName + " registered");
         } else {
             plugin.getLogger().log(Level.WARNING, "World " + endWorldName + " does not exist");
