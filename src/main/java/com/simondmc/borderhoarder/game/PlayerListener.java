@@ -95,7 +95,7 @@ public class PlayerListener implements Listener {
     public void breakBlock(BlockBreakEvent e) {
         if (!GameData.getBoolean("dropped-first-seed") &&
                 e.getBlock().getWorld().getName().equals(BorderWorldCreator.worldName) &&
-                e.getBlock().getType().equals(Material.GRASS)) {
+                e.getBlock().getType().equals(Material.SHORT_GRASS)) {
             e.setDropItems(false);
             e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), new ItemStack(Material.WHEAT_SEEDS));
             GameData.set("dropped-first-seed", true);

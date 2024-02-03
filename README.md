@@ -33,7 +33,7 @@ Collect unique items to expand the border!
   with the overworld), but the end doesn't have a border, just
   so that obtaining an elytra and outer end island items is
   possible
-- As of 1.19.2, there are 1,051 total obtainable items in
+- As of 1.20.4, there are 1,147 total obtainable items in
   survival, and collecting any other item (such as bedrock
   or command blocks) will not count towards the progression and
   will not expand the border.
@@ -51,8 +51,9 @@ Collect unique items to expand the border!
 
 - The plugin runs on Bukkit, meaning any fork of Bukkit should
   work, including Spigot and Paper
-- The game only works on 1.19 and above, as it uses all the new
-  items added in 1.19.
+- The game is intended to be played on 1.20.4. It will probably 
+  not work below 1.20.3, and I can't guarantee it will work on 
+  future versions until I update it.
 - The game can be played with any number of players, but it is
   recommended to play with 2-4 players. The more players there
   are, the easier the game will get.

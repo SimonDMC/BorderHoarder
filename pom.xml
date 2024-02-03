@@ -41,7 +41,7 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <outputFile>C:\Users\SimonDMC\Desktop\Spigot\plugins\BorderHoarder.jar</outputFile>
+                            <outputFile>C:\Users\simon\OneDrive\Desktop\spigot\plugins\BorderHoarder.jar</outputFile>
                         </configuration>
                     </execution>
                 </executions>
@@ -70,7 +70,8 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.19.2-R0.1-SNAPSHOT</version>
+            <version>1.20.4-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
